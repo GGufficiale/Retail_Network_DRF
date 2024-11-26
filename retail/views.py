@@ -9,27 +9,15 @@ from retail.serializers import BaseSupplierSerializer
 from users.permissions import IsOwner
 
 
-class RetailCreateAPIView(generics.CreateAPIView):
+class RetailListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = BaseSupplierSerializer
     queryset = BaseSupplier.objects.all()
     permission_classes = (IsAuthenticated,)
 
-    # def perform_create(self, serializer):
-    #     retail = serializer.save()
-    #     retail.owner = self.request.user
-    #     retail.save()
-
-
-class RetailListAPIView(generics.ListAPIView):
-    serializer_class = BaseSupplierSerializer
-    queryset = BaseSupplier.objects.all()
-    permission_classes = (IsAuthenticated,)
-    # filter_backends: list = [DjangoFilterBackend, ]
-    # filter_set_fields: List[str] = ["contact__country", ]
-
-    # def get_queryset(self):
-    #     queryset = self.queryset.filter(owner=self.request.user)
-    #     return queryset
+    def get_queryset(self):
+        if country := self.request.query_params.get('country'):
+            return BaseSupplier.objects.filter(contacts_country__icontains=country)
+        return BaseSupplier.objects.all()
 
 
 class RetailRetrieveAPIView(generics.RetrieveAPIView):
@@ -48,9 +36,3 @@ class RetailDestroyAPIView(generics.DestroyAPIView):
     serializer_class = BaseSupplierSerializer
     queryset = BaseSupplier.objects.all()
     permission_classes = (IsAuthenticated, IsOwner)
-
-
-# class RetailPublicListAPIView(generics.ListAPIView):
-#     serializer_class = BaseSupplierSerializer
-#     queryset = BaseSupplier.objects.filter(is_public=True)
-#     permission_classes = (AllowAny,)

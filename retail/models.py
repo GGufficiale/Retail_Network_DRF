@@ -2,15 +2,11 @@ from datetime import datetime
 from typing import List
 
 from django.db import models
-from users.models import User
 
 NULLABLE = {'blank': True, 'null': True}  # форма, если параметр необязателен
 
 
 class BaseSupplier(models.Model):
-    """
-    Базовый класс для всех элементов сети
-    """
     name = models.CharField(max_length=100, unique=True, verbose_name='Название',
                             help_text="Введите название поставщика")
     supplier = models.ForeignKey('self', **NULLABLE, default=None, on_delete=models.SET_DEFAULT,
@@ -69,57 +65,3 @@ class Product(models.Model):
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
         ordering = ['name', 'description', 'model', 'price']
-        # Поля для функционала прав доступа - варианты редактирования
-        # permissions = [
-        #     ('cancel_publication', 'Can cancel publication'),
-        #     ('edit_description', 'Can edit description'),
-        #     ('change_category', 'Can change category'),
-        # ]
-
-# class Factory(BaseSupplier):
-#     contact = models.ForeignKey(Contacts, verbose_name='Контакт завода', help_text='Укажите контакт завода', **NULLABLE,
-#                                 on_delete=models.SET_NULL)
-#     product = models.ForeignKey(Product, verbose_name='Продукт', help_text='Укажите продукт', **NULLABLE,
-#                                 on_delete=models.SET_NULL)
-#
-#     def __str__(self):
-#         return f"{self.name} {self.contact}"
-#
-#     class Meta:
-#         verbose_name = "Завод"
-#         verbose_name_plural = "Заводы"
-#
-#
-# class RetailNetwork(BaseSupplier):
-#     contact = models.ForeignKey(Contacts, verbose_name='Контакт розничной сети',
-#                                 help_text='Укажите контакт розничной сети', **NULLABLE, on_delete=models.SET_NULL)
-#     product = models.ForeignKey(Product, verbose_name='Продукт', help_text='Укажите продукт', **NULLABLE,
-#                                 on_delete=models.SET_NULL)
-#     factory_supplier = models.ForeignKey(Factory, verbose_name='Завод-поставщик', help_text='Укажите завод-поставщик',
-#                                          **NULLABLE, on_delete=models.SET_NULL)
-#
-#     def __str__(self):
-#         return f"{self.name} {self.contact}"
-#
-#     class Meta:
-#         verbose_name = "Розничная сеть"
-#         verbose_name_plural = "Розничные сети"
-#
-#
-# class IP(BaseSupplier):
-#     contact = models.ForeignKey(Contacts, verbose_name='Контакт ИП', help_text='Укажите Контакт ИП', **NULLABLE,
-#                                 on_delete=models.SET_NULL)
-#     product = models.ForeignKey(Product, verbose_name='Продукт', help_text='Укажите продукт', **NULLABLE,
-#                                 on_delete=models.SET_NULL)
-#     factory_supplier = models.ForeignKey(Factory, verbose_name='Завод-поставщик', help_text='Укажите завод-поставщик',
-#                                          **NULLABLE, on_delete=models.SET_NULL)
-#     retail_network_supplier = models.ForeignKey(RetailNetwork, verbose_name='Розничная сеть-поставщик',
-#                                                 help_text='Укажите розничную сеть-поставщик', **NULLABLE,
-#                                                 on_delete=models.SET_NULL)
-#
-#     def __str__(self):
-#         return f"{self.name} {self.contact}"
-#
-#     class Meta:
-#         verbose_name = "ИП"
-#         verbose_name_plural = "Ипешечки"
