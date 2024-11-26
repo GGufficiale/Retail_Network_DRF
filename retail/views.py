@@ -1,6 +1,3 @@
-from typing import List
-
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
